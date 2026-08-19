@@ -1,0 +1,43 @@
+.history-main { max-width: 780px; margin: 42px auto 0; }
+.history-main > h1 { margin: 0 0 9px; font-size: 28px; }
+.history-description { margin-bottom: 27px; color: #888b85; font-size: 13px; }
+.history-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px; color: #888b85; font-size: 12px; }
+.text-danger-button, .history-delete-button { border: 0; color: #c87870; background: transparent; font-size: 12px; cursor: pointer; }
+.history-list { display: grid; gap: 11px; }
+.history-item { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 20px 22px; border: 1px solid #ded7c6; border-radius: 15px; background: #fffdf7; box-shadow: 0 8px 20px rgba(93, 78, 46, .035); }
+.history-status { color: #5f8f8a; font-size: 11px; font-weight: 700; }
+.history-item h2 { margin: 8px 0 5px; font-size: 15px; }
+.history-item p { margin: 0; color: #999b93; font-size: 11px; }
+.history-actions { display: flex; flex-shrink: 0; gap: 9px; align-items: center; }
+.history-view-button { border: 1px solid #ded7c6; border-radius: 8px; padding: 8px 11px; color: #4c7773; background: #fffdf7; font-size: 11px; cursor: pointer; }
+.history-delete-button { padding: 7px; }
+.history-empty-card { max-width: 510px; margin: 80px auto 0; padding: 45px; text-align: center; }
+.history-empty-card h1, .history-empty-card h2 { margin-bottom: 11px; }
+.history-empty-card p { color: #888b85; font-size: 13px; }
+.history-empty-card .flow-primary-button { max-width: 300px; margin: 23px auto 0; }
+.history-detail-card { max-width: 650px; margin: 30px auto 0; }
+.history-detail-question { display: grid; gap: 6px; margin: 22px 0 29px; padding: 15px; border-radius: 10px; background: #faf8ef; }
+.history-detail-question span { color: #5f8f8a; font-size: 11px; font-weight: 700; }
+.history-detail-question strong { font-size: 14px; }
+.history-detail-question small { color: #999b93; font-size: 11px; }
+.history-detail-card > h2 { font-size: 17px; }
+.history-detail-section { margin-top: 28px; padding-top: 24px; border-top: 1px solid #eee8d9; }
+.history-detail-section h2 { margin-bottom: 12px; font-size: 17px; }
+.history-transcript { margin: 0; padding: 16px; border-radius: 10px; color: #666a66; background: #faf8ef; font-size: 13px; line-height: 1.8; white-space: pre-wrap; }
+.history-transcript.second-answer { background: #e3efec; }
+.history-detail-section .history-metrics { margin-top: 0; }
+.history-change-list { display: grid; gap: 8px; }
+.history-change-list p { margin: 0; padding: 12px 14px; border-radius: 9px; color: #666a66; background: #e3efec; font-size: 13px; line-height: 1.6; }
+.history-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+.history-metrics > div { padding: 14px 9px; border: 1px solid #ded7c6; border-radius: 10px; text-align: center; }
+.history-metrics span, .history-metrics strong { display: block; }
+.history-metrics span { margin-bottom: 7px; color: #888b85; font-size: 11px; }
+.history-metrics strong { color: #4c7773; font-size: 13px; }
+.history-readonly { margin: 22px 0 0; color: #999b93; font-size: 11px; text-align: center; }
+.history-back-button { display: block; margin: 13px auto 0; border: 0; color: #5f8f8a; background: transparent; font-size: 12px; cursor: pointer; }
+.confirm-backdrop { position: fixed; z-index: 10; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(47, 61, 59, .18); }
+.confirm-card { width: min(100%, 390px); padding: 27px; border-radius: 17px; background: #fffdf7; box-shadow: 0 18px 40px rgba(47, 61, 59, .16); text-align: center; }
+.confirm-card h2 { margin-bottom: 9px; font-size: 18px; }
+.confirm-card p { margin-bottom: 22px; color: #888b85; font-size: 12px; }
+.confirm-card > div { display: flex; justify-content: center; gap: 10px; }
+@media (max-width: 600px) { .history-page { padding: 0 18px 24px; } .history-main { margin-top: 28px; } .history-main > h1 { font-size: 23px; } .history-item { align-items: flex-start; flex-direction: column; gap: 15px; } .history-actions { width: 100%; justify-content: flex-end; } .history-metrics { grid-template-columns: 1fr; } }

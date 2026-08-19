@@ -1,0 +1,52 @@
+.flow-page { min-height: 100vh; padding: 0 5vw 36px; background: #f4eacf; color: #2f3d3b; }
+.account-menu { position: relative; }
+.account-popover { position: absolute; z-index: 2; top: calc(100% + 8px); right: 0; min-width: 100px; padding: 6px; border: 1px solid #ded7c6; border-radius: 9px; background: #fffdf7; box-shadow: 0 8px 18px rgba(93, 78, 46, .12); }
+.account-popover button { width: 100%; border: 0; border-radius: 6px; padding: 8px; color: #666a66; background: transparent; font-size: 12px; cursor: pointer; }
+.account-popover button:hover { background: #e3efec; color: #4c7773; }
+.flow-main { max-width: 720px; margin: 54px auto 0; }
+.result-main { max-width: 780px; }
+.flow-card { border: 1px solid rgba(222, 215, 198, .9); border-radius: 24px; padding: 44px 52px; background: #fffdf7; box-shadow: 0 12px 30px rgba(93, 78, 46, .05); }
+.analysis-card { min-height: 440px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.flow-icon { display: grid; width: 66px; height: 66px; place-items: center; margin-bottom: 22px; border-radius: 50%; background: #e3efec; font-size: 26px; }
+.flow-icon.is-loading { border: 3px solid #d8e8e5; border-top-color: #5f8f8a; background: transparent; animation: flow-spin .8s linear infinite; }
+.flow-icon.is-loading span { width: 8px; height: 8px; border-radius: 50%; background: #5f8f8a; }
+.flow-eyebrow { margin: 0 0 13px; color: #5f8f8a; font-size: 12px; font-weight: 700; letter-spacing: .04em; }
+.flow-card h1 { margin: 0 0 12px; color: #2f3d3b; font-size: 27px; line-height: 1.45; letter-spacing: -.055em; }
+.flow-card h2 { margin: 0 0 12px; color: #2f3d3b; font-size: 17px; letter-spacing: -.04em; }
+.analysis-card > p:not(.flow-eyebrow) { margin: 0; color: #666a66; font-size: 14px; line-height: 1.8; }
+.flow-question { width: 100%; margin-top: 24px; padding: 14px 16px; border: 1px solid #ded7c6; border-radius: 11px; background: #faf8ef; color: #2f3d3b; text-align: left; font-size: 13px; line-height: 1.6; }
+.flow-question span { display: block; margin-bottom: 4px; color: #5f8f8a; font-size: 11px; font-weight: 700; }
+.flow-question strong { font-weight: 600; }
+.flow-primary-button, .flow-secondary-button { width: 100%; border-radius: 11px; padding: 13px 18px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.flow-primary-button { margin-top: 28px; border: 0; color: #fff; background: #5f8f8a; }
+.flow-primary-button:hover { background: #4c7773; }
+.flow-secondary-button { width: auto; margin-top: 8px; border: 1px solid #ded7c6; color: #4c7773; background: #fffdf7; }
+.result-card > h1 { margin-bottom: 19px; font-size: 25px; }
+.result-section { margin-top: 28px; padding-top: 25px; border-top: 1px solid #eee8d9; }
+.result-section h2 { margin-bottom: 13px; }
+.transcript { margin: 0; padding: 15px 16px; border-radius: 10px; color: #666a66; background: #faf8ef; font-size: 13px; line-height: 1.8; }
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.metric { padding: 16px 12px; border: 1px solid #ded7c6; border-radius: 11px; background: #fffdf7; text-align: center; }
+.metric span, .metric strong { display: block; }
+.metric span { margin-bottom: 8px; color: #888b85; font-size: 11px; }
+.metric strong { color: #4c7773; font-size: 16px; }
+.feedback-list { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.feedback-list li { padding: 12px 14px; border-radius: 9px; color: #666a66; background: #e3efec; font-size: 13px; line-height: 1.6; }
+.neutral-section, .subtle-section { padding: 17px; border: 1px solid #ded7c6; border-radius: 11px; background: #faf8ef; }
+.neutral-section small { color: #999b93; font-size: 11px; }
+.neutral-section p, .subtle-section p, .coach-section p { margin: 0; color: #666a66; font-size: 13px; line-height: 1.7; }
+.subtle-section { border-color: #e4e6dc; background: #f5f7f1; }
+.coach-section { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.coach-section h2 { width: 100%; margin-bottom: 0; }
+.coach-section .flow-secondary-button { margin: 0; }
+.accordion { margin-top: 28px; border-top: 1px solid #eee8d9; border-bottom: 1px solid #eee8d9; }
+.accordion > button { display: flex; width: 100%; justify-content: space-between; border: 0; padding: 18px 0; color: #4c7773; background: transparent; font-size: 14px; font-weight: 700; cursor: pointer; }
+.accordion-content { padding: 0 0 14px; color: #666a66; font-size: 13px; line-height: 1.6; }
+.accordion-content p { margin: 7px 0; }
+.comparison-grid { display: grid; grid-template-columns: minmax(120px, 1fr) repeat(2, minmax(80px, .7fr)); overflow: hidden; border: 1px solid #ded7c6; border-radius: 11px; }
+.comparison-grid > * { margin: 0; padding: 13px 12px; border-right: 1px solid #eee8d9; border-bottom: 1px solid #eee8d9; color: #666a66; font-size: 13px; }
+.comparison-grid > :nth-child(3n) { border-right: 0; }
+.comparison-grid > :nth-last-child(-n+3) { border-bottom: 0; }
+.comparison-grid strong { color: #4c7773; background: #faf8ef; text-align: center; }
+@keyframes flow-spin { to { transform: rotate(360deg); } }
+@media (max-width: 600px) { .flow-page { padding: 0 18px 24px; } .flow-main { margin-top: 28px; } .flow-card { padding: 32px 24px; } .flow-card h1 { font-size: 23px; } .metric-grid { grid-template-columns: 1fr; } .comparison-grid > * { padding: 11px 8px; font-size: 12px; } }

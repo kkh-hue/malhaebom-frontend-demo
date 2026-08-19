@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+
+:root { font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; color: #2f3d3b; background: #f4eacf; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: #f4eacf; }
+button, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+.practice-page { min-height: 100vh; padding: 0 5vw 28px; }
+.site-header { max-width: 1180px; height: 88px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.brand { border: 0; padding: 0; color: #2f3d3b; background: transparent; text-decoration: none; font-size: 25px; font-weight: 700; letter-spacing: -1px; cursor: pointer; }
+.site-nav { display: flex; gap: 30px; align-items: center; }
+.nav-link { position: relative; border: 0; padding: 8px 0; color: #666a66; background: transparent; font-size: 14px; text-decoration: none; cursor: pointer; }
+.nav-link.is-active { color: #2f3d3b; font-weight: 700; }
+.nav-link.is-active::after { content: ''; position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: #5f8f8a; }
+.login-button { border: 0; border-radius: 10px; padding: 11px 17px; color: #fff; background: #5f8f8a; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .2s; }
+.login-button:hover, .start-button:hover:not(:disabled) { background: #4c7773; }
+.practice-main { max-width: 1180px; margin: 24px auto 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
+.card { height: min(590px, calc(100vh - 145px)); min-height: 0; border: 1px solid rgba(222, 215, 198, .9); border-radius: 24px; background: #fffdf7; box-shadow: 0 12px 30px rgba(93, 78, 46, .05); }
+.intro-card { display: flex; flex-direction: column; padding: 39px 44px 34px; overflow: hidden; }
+.intro-topline, .eyebrow { color: #5f8f8a; font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+h1, h2, p { margin-top: 0; }
+h1 { margin: 20px 0 17px; color: #2f3d3b; font-size: clamp(25px, 2.4vw, 34px); line-height: 1.42; letter-spacing: -.06em; }
+.intro-description { color: #666a66; font-size: 15px; line-height: 1.82; letter-spacing: -.035em; }
+.notice-group { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 15px; }
+.notice { display: flex; max-width: 100%; align-items: flex-start; gap: 6px; padding: 8px 11px; border-radius: 8px; color: #4c7773; background: #e3efec; font-size: 11px; font-weight: 500; line-height: 1.45; }
+.steps { display: flex; align-items: center; margin-top: auto; padding-top: 34px; }
+.step { display: flex; flex-direction: column; gap: 8px; color: #666a66; font-size: 12px; white-space: nowrap; }
+.step-number { color: #5f8f8a; font-size: 11px; font-weight: 700; }
+.step-line { width: 100%; height: 1px; margin: 0 12px; background: #ded7c6; }
+.question-card { display: flex; flex-direction: column; padding: 34px 36px 27px; }
+.eyebrow { margin-bottom: 12px; font-size: 11px; }
+h2 { margin-bottom: 8px; font-size: 25px; letter-spacing: -.055em; }
+.question-heading > p:last-child { margin-bottom: 20px; color: #888b85; font-size: 13px; }
+.question-tabs { display: flex; gap: 23px; border-bottom: 1px solid #ded7c6; }
+.tab { position: relative; border: 0; padding: 0 3px 14px; color: #a1a29a; background: transparent; font-size: 14px; font-weight: 600; cursor: pointer; }
+.tab.is-selected { color: #4c7773; }
+.tab.is-selected::after { content: ''; position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: #5f8f8a; }
+.preset-panel, .custom-panel { display: flex; flex: 1; flex-direction: column; min-height: 0; padding-top: 14px; }
+.panel-caption { margin-bottom: 11px; color: #888b85; font-size: 12px; }
+.question-list { flex: 1; height: 0; min-height: 0; overflow-y: auto; padding-right: 5px; }
+.question-list::-webkit-scrollbar { width: 5px; }
+.question-list::-webkit-scrollbar-thumb { border-radius: 5px; background: #ded7c6; }
+.preset-question { display: flex; width: 100%; align-items: center; gap: 12px; border: 1px solid transparent; border-radius: 10px; margin-bottom: 6px; padding: 11px 12px; color: #666a66; background: transparent; font-size: 13px; text-align: left; cursor: pointer; transition: .15s ease; }
+.preset-question:hover { background: #f7faf7; }
+.preset-question.is-selected { border-color: #a8c9c4; color: #2f5e5a; background: #e3efec; font-weight: 600; }
+.question-index { min-width: 21px; color: #a3aaa3; font-size: 11px; }
+.preset-question.is-selected .question-index { color: #5f8f8a; }
+.checkmark { width: 16px; margin-left: auto; color: #4c7773; font-size: 15px; }
+.custom-panel textarea { width: 100%; min-height: 245px; resize: vertical; border: 1px solid #ded7c6; border-radius: 12px; outline: none; padding: 15px; color: #2f3d3b; background: #fffdf7; font-size: 14px; line-height: 1.7; }
+.custom-panel textarea:focus { border-color: #5f8f8a; box-shadow: 0 0 0 3px rgba(95, 143, 138, .12); }
+.custom-panel textarea[aria-invalid='true'] { border-color: #c87870; }
+.custom-meta { display: flex; justify-content: space-between; gap: 12px; padding-top: 8px; }
+.error-message { color: #c87870; font-size: 12px; }
+.character-count { margin-left: auto; color: #92968e; font-size: 12px; }
+.cta-area { flex: 0 0 auto; margin-top: 14px; }
+.start-button { display: flex; width: 100%; justify-content: center; align-items: center; gap: 12px; border: 0; border-radius: 11px; padding: 14px; color: #fff; background: #5f8f8a; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+.start-button:disabled { opacity: .4; cursor: not-allowed; }
+.start-button span { font-size: 18px; line-height: 1; }
+.mock-status { margin: 10px 0 0; color: #5f8f8a; font-size: 12px; text-align: center; }
+.microphone-panel { display: flex; flex: 1; flex-direction: column; align-items: center; min-height: 0; padding: 24px 8px 0; text-align: center; }
+.microphone-panel.is-centered { justify-content: center; padding-top: 0; }
+.microphone-icon { display: grid; width: 64px; height: 64px; place-items: center; margin-bottom: 18px; border-radius: 50%; background: #e3efec; font-size: 28px; }
+.microphone-panel h3 { margin: 0 0 10px; color: #2f3d3b; font-size: 22px; letter-spacing: -.055em; }
+.microphone-panel p { margin-bottom: 0; color: #666a66; font-size: 13px; line-height: 1.7; }
+.microphone-panel small { max-width: 360px; margin-top: 16px; color: #888b85; font-size: 11px; line-height: 1.6; }
+.microphone-panel .start-button { margin-top: auto; }
+.loading-indicator { width: 22px; height: 22px; margin: 25px auto; border: 3px solid #d8e8e5; border-top-color: #5f8f8a; border-radius: 50%; animation: microphone-spin .8s linear infinite; }
+.selected-question-preview { width: 100%; margin: 25px 0; padding: 14px 16px; border: 1px solid #ded7c6; border-radius: 11px; background: #faf8ef; text-align: left; }
+.selected-question-preview span { display: block; margin-bottom: 5px; color: #5f8f8a; font-size: 11px; font-weight: 700; }
+.selected-question-preview strong { color: #2f3d3b; font-size: 13px; line-height: 1.6; }
+@keyframes microphone-spin { to { transform: rotate(360deg); } }
+.site-footer { max-width: 1180px; margin: 24px auto 0; color: #a19f93; font-size: 11px; text-align: center; }
+.site-footer span { margin: 0 7px; color: #c87870; }
+@media (max-width: 800px) { .practice-page { padding: 0 18px 22px; } .site-header { height: 76px; } .site-nav { gap: 15px; } .nav-link { font-size: 12px; } .login-button { padding: 9px 11px; font-size: 11px; } .practice-main { grid-template-columns: 1fr; margin-top: 21px; } .card { height: auto; min-height: 0; } .intro-card { min-height: 430px; padding: 36px 29px 31px; } .question-card { min-height: 600px; padding: 32px 26px 27px; } h1 { font-size: 27px; } .steps { padding-top: 39px; } }
+@media (max-width: 470px) { .brand { font-size: 21px; } .site-nav { gap: 9px; } .nav-link { font-size: 11px; } .login-button { padding: 8px 8px; font-size: 10px; } .intro-card { padding: 32px 23px 27px; } .question-card { padding: 29px 20px 24px; } .steps { align-items: flex-start; } .step { font-size: 10px; } .step-line { margin: 4px 7px 0; } }
