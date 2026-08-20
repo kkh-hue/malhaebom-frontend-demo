@@ -3,6 +3,7 @@ import type { PracticeQuestion } from "./PracticePage";
 import type { CoachAudioState } from "../mocks/analysisMock";
 import { AppHeader } from "../navigation";
 import { MOCK_ERROR_STATE } from "../mocks/errorStateMock";
+import { MOCK_QUESTION_TTS, type QuestionTtsMock, type QuestionTtsState } from "../mocks/questionTtsMock";
 import "../styles/recording-page.css";
 
 type RecordingPageProps = {
@@ -26,8 +27,18 @@ function formatTime(milliseconds: number) {
   return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 }
 
+function createQuestionTtsMock(question: string): QuestionTtsMock {
+  return {
+    ...MOCK_QUESTION_TTS,
+    originalText: question,
+    normalizedText: question.trim().replace(/\s+/g, " "),
+    state: "loading",
+  };
+}
+
 function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioState = "unavailable", onAnalysis, isLoggedIn, onLogin }: RecordingPageProps) {
   const [status, setStatus] = useState<RecordingStatus>("ready");
+  const [questionTts, setQuestionTts] = useState<QuestionTtsMock>(() => createQuestionTtsMock(question.question));
   const [elapsedMs, setElapsedMs] = useState(0);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [errorType, setErrorType] = useState<RecordingError | null>(null);
@@ -40,6 +51,7 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
   const startedAtRef = useRef(0);
   const elapsedBeforeResumeRef = useRef(0);
   const recorderErrorRef = useRef(false);
+  const questionTtsTimerRef = useRef<number | null>(null);
 
   const stopStream = () => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -66,6 +78,19 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
   };
 
   useEffect(() => {
+    setQuestionTts(createQuestionTtsMock(question.question));
+    questionTtsTimerRef.current = window.setTimeout(() => {
+      setQuestionTts((current) => ({
+        ...current,
+        state: MOCK_ERROR_STATE === "question-tts-failed" || MOCK_ERROR_STATE === "question-tts-unavailable" ? "error" : "ready",
+      }));
+    }, 700);
+    return () => {
+      if (questionTtsTimerRef.current !== null) window.clearTimeout(questionTtsTimerRef.current);
+    };
+  }, [question.question]);
+
+  useEffect(() => {
     if (status !== "recording") return undefined;
     const timer = window.setInterval(() => {
       const nextValue = elapsedBeforeResumeRef.current + (Date.now() - startedAtRef.current);
@@ -83,6 +108,7 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
   useEffect(() => () => {
     stopStream();
     recorderRef.current = null;
+    if (questionTtsTimerRef.current !== null) window.clearTimeout(questionTtsTimerRef.current);
     if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
   }, []);
 
@@ -211,6 +237,26 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
     onAnalysis(attemptNo);
   };
 
+  const playQuestionTts = () => {
+    if (questionTts.state !== "ready" && questionTts.state !== "completed") return;
+    if (questionTtsTimerRef.current !== null) window.clearTimeout(questionTtsTimerRef.current);
+    setQuestionTts((current) => ({ ...current, state: "playing" }));
+    questionTtsTimerRef.current = window.setTimeout(() => {
+      setQuestionTts((current) => ({ ...current, state: "completed" }));
+    }, 1500);
+  };
+
+  const retryQuestionTts = () => {
+    if (questionTtsTimerRef.current !== null) window.clearTimeout(questionTtsTimerRef.current);
+    setQuestionTts((current) => ({ ...current, state: "loading" }));
+    questionTtsTimerRef.current = window.setTimeout(() => {
+      setQuestionTts((current) => ({
+        ...current,
+        state: "ready",
+      }));
+    }, 700);
+  };
+
   const errorTitle = errorType === "too-short" ? "조금만 더 답변해 주세요." : errorType === "microphone" ? "마이크를 사용할 수 없어요." : errorType === "interrupted" ? "녹음이 중단됐어요." : errorType === "blob" ? "녹음 파일을 만들 수 없어요." : "녹음을 시작할 수 없어요.";
   const errorDescription = errorType === "too-short" ? "답변은 5초 이상 녹음해야 분석할 수 있어요." : errorType === "microphone" ? "마이크 권한과 연결 상태를 확인한 뒤 다시 시도해 주세요." : errorType === "interrupted" ? "마이크 연결 상태를 확인한 뒤 다시 시도해 주세요." : errorType === "blob" ? "잠시 후 다시 녹음해 주세요." : "마이크 권한과 연결 상태를 확인한 뒤 다시 시도해 주세요.";
   const statusLabel = status === "ready" ? "녹음 준비" : status === "recording" ? "녹음 중" : status === "paused" ? "일시정지" : status === "completed" ? "녹음 완료" : errorType === "too-short" ? "녹음 확인" : "녹음 오류";
@@ -220,8 +266,14 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
       <AppHeader />
       <main className="recording-main">
         <section className="recording-card" aria-labelledby="recording-title">
-          <p className="eyebrow">{statusLabel}</p>
-          <div className="recording-question"><span>선택한 질문</span><h1>{question.question}</h1></div>
+          {status !== "ready" && <p className="eyebrow">{statusLabel}</p>}
+          <div className="recording-question">
+            <span>선택한 질문</span>
+            <div className="recording-question-body">
+              <h1>{question.question}</h1>
+              <QuestionTtsPanel state={questionTts.state} onPlay={playQuestionTts} onRetry={retryQuestionTts} />
+            </div>
+          </div>
 
           {status === "ready" && <div className="recording-state ready-state">
             <div className="recording-icon" aria-hidden="true">🎙️</div>
@@ -263,6 +315,26 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
       {showLoginRequired && <div className="recording-login-backdrop"><div className="recording-login-card"><h2>분석 결과를 확인하려면 로그인이 필요해요.</h2><p>로그인 후 연습 결과를 최대 24시간 동안 확인할 수 있어요.</p><div><button className="secondary-button" type="button" onClick={() => setShowLoginRequired(false)}>돌아가기</button><button className="start-button" type="button" onClick={onLogin}>로그인하기</button></div></div></div>}
     </div>
   );
+}
+
+function QuestionTtsPanel({ state, onPlay, onRetry }: { state: QuestionTtsState; onPlay: () => void; onRetry: () => void }) {
+  if (state === "loading" || state === "idle") {
+    return <div className="question-tts-panel" role="status" aria-live="polite"><span className="question-tts-message">질문 음성을 준비하고 있어요.</span><span className="question-tts-detail">잠시만 기다려 주세요.</span></div>;
+  }
+
+  if (state === "playing") {
+    return <div className="question-tts-panel is-playing" role="status" aria-live="polite"><span className="question-tts-message">질문을 재생하고 있어요.</span></div>;
+  }
+
+  if (state === "error") {
+    return <div className="question-tts-panel is-error" role="alert"><span className="question-tts-message">질문 음성을 준비하지 못했어요.</span><span className="question-tts-detail">잠시 후 다시 시도해 주세요.</span><button className="question-tts-button" type="button" onClick={onRetry}>다시 시도</button></div>;
+  }
+
+  if (state === "completed") {
+    return <div className="question-tts-panel is-completed" role="status" aria-live="polite"><span className="question-tts-message">질문을 들었어요.</span><button className="question-tts-button" type="button" onClick={onPlay}>다시 듣기</button></div>;
+  }
+
+  return <div className="question-tts-panel" role="status"><button className="question-tts-button" type="button" onClick={onPlay}>질문 듣기</button></div>;
 }
 
 export default RecordingPage;

@@ -1,4 +1,4 @@
-.history-main { max-width: 780px; margin: 42px auto 0; }
+.history-main { width: min(100%, 780px); max-width: 780px; margin: 38px auto 0; }
 .history-main > h1 { margin: 0 0 9px; font-size: 28px; }
 .history-description { margin-bottom: 27px; color: #888b85; font-size: 13px; }
 .history-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px; color: #888b85; font-size: 12px; }
@@ -11,11 +11,11 @@
 .history-actions { display: flex; flex-shrink: 0; gap: 9px; align-items: center; }
 .history-view-button { border: 1px solid #ded7c6; border-radius: 8px; padding: 8px 11px; color: #4c7773; background: #fffdf7; font-size: 11px; cursor: pointer; }
 .history-delete-button { padding: 7px; }
-.history-empty-card { max-width: 510px; margin: 80px auto 0; padding: 45px; text-align: center; }
+.history-empty-card { max-width: 780px; margin: 0 auto; padding: 36px 44px; text-align: center; }
 .history-empty-card h1, .history-empty-card h2 { margin-bottom: 11px; }
 .history-empty-card p { color: #888b85; font-size: 13px; }
 .history-empty-card .flow-primary-button { max-width: 300px; margin: 23px auto 0; }
-.history-detail-card { max-width: 650px; margin: 30px auto 0; }
+.history-detail-card { max-width: 780px; margin: 0 auto; }
 .history-detail-question { display: grid; gap: 6px; margin: 22px 0 29px; padding: 15px; border-radius: 10px; background: #faf8ef; }
 .history-detail-question span { color: #5f8f8a; font-size: 11px; font-weight: 700; }
 .history-detail-question strong { font-size: 14px; }
@@ -40,4 +40,4 @@
 .confirm-card h2 { margin-bottom: 9px; font-size: 18px; }
 .confirm-card p { margin-bottom: 22px; color: #888b85; font-size: 12px; }
 .confirm-card > div { display: flex; justify-content: center; gap: 10px; }
-@media (max-width: 600px) { .history-page { padding: 0 18px 24px; } .history-main { margin-top: 28px; } .history-main > h1 { font-size: 23px; } .history-item { align-items: flex-start; flex-direction: column; gap: 15px; } .history-actions { width: 100%; justify-content: flex-end; } .history-metrics { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .history-page { padding: 0 18px 24px; } .history-main { margin-top: 28px; } .history-main > h1 { font-size: 23px; } .history-item { align-items: flex-start; flex-direction: column; gap: 15px; } .history-actions { width: 100%; justify-content: flex-end; } .history-metrics { grid-template-columns: 1fr; } .history-empty-card { padding: 28px 24px; } }

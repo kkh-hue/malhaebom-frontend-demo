@@ -6,6 +6,8 @@ export type MockErrorState =
   | "too-short"
   | "analysis-failed"
   | "no-speech"
+  | "question-tts-failed"
+  | "question-tts-unavailable"
   | "coach-audio-unavailable"
   | "coach-audio-error"
   | "auth-required-analysis"

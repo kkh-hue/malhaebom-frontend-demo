@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { PracticeQuestion } from "./PracticePage";
-import type { AnalysisResult, CoachAudioState } from "../mocks/analysisMock";
-import { MOCK_COACH_AUDIO_SRC } from "../mocks/analysisMock";
+import type { AnalysisResult, CoachAudioState, ContentFeedback } from "../mocks/analysisMock";
+import { MOCK_COACH_AUDIO_SRC, MOCK_CONTENT_FEEDBACK_BY_QUESTION } from "../mocks/analysisMock";
 import { MOCK_ERROR_STATE } from "../mocks/errorStateMock";
 import "../styles/flow-pages.css";
 import { AppHeader } from "../navigation";
@@ -24,16 +24,31 @@ function ResultPage({ question, result, coachAudioState, onRerecord }: ResultPag
           <h1>답변의 전달 방식을 확인해 봤어요.</h1>
           <div className="flow-question"><span>선택한 질문</span><strong>{question.question}</strong></div>
           <section className="result-section"><h2>내 답변</h2><p className="transcript">{result.transcript}</p></section>
-          <section className="result-section"><h2>분석 결과</h2><div className="metric-grid"><Metric label="말하기 속도" value={`${result.speakingRate} 음절/분`} /><Metric label="긴 침묵" value={`${result.longSilence}회`} /><Metric label="반복 표현" value={`${result.repeatedExpressions}회`} /></div></section>
-          <section className="result-section"><h2>다음 연습에서 바꿔볼 점</h2><ul className="feedback-list">{result.feedback.slice(0, 2).map((item) => <li key={item}>{item}</li>)}</ul></section>
-          {question.questionType === "preset" && <section className="result-section neutral-section"><h2>답변 구성 점검</h2><p>답변이 자연스럽게 이어지는지 흐름을 확인해요.</p><small>정답이나 답변의 좋고 나쁨을 판단하지 않아요.</small></section>}
-          {result.prosodyReferenceAvailable && <section className="result-section subtle-section"><h2>참고 피드백</h2><p>답변 중 일부 구간에서 목소리 크기 변화가 적게 나타났어요.</p></section>}
+          <section className="result-section analysis-results-section"><h2>분석 결과</h2><div className="analysis-metrics-grid">
+            <VerticalBarCard label="말하기 속도" value={result.speakingRate} reference={result.referenceMetrics.pace.value} unit="음절/분" />
+            <VerticalBarCard label="긴 침묵" value={result.longSilence} reference={result.referenceMetrics.longSilenceCount.value} unit="회" />
+            <VerticalBarCard label="반복 표현" value={result.repeatedExpressions} reference={result.referenceMetrics.repetitionCount.value} unit="회" />
+          </div></section>
+          <section className="result-section"><h2>다음 연습에서 바꿔볼 점</h2><div className="action-feedback-list">{result.feedback.slice(0, 2).map((item) => <article className="action-feedback" key={item.title}><h3>{item.title}</h3><div className="feedback-part"><strong>측정 결과</strong><p>{item.measurement}</p></div><div className="feedback-part"><strong>연습 목표</strong><p>{item.nextPractice}</p></div></article>)}</div></section>
+          <ContentFeedbackSection feedback={question.questionType === "preset" ? MOCK_CONTENT_FEEDBACK_BY_QUESTION[question.question] ?? result.contentFeedback : result.contentFeedback} />
           <CoachAudioSection state={effectiveCoachAudioState} />
           <button className="flow-primary-button" type="button" onClick={onRerecord}>재녹음 하기</button>
         </section>
       </main>
     </div>
   );
+}
+
+function VerticalBarCard({ label, value, reference, unit }: { label: string; value: number; reference: number; unit: string }) {
+  const max = Math.max(value, reference, 1);
+  return <article className="metric-visual-card vertical-bar-card">
+    <div className="metric-card-heading"><h3>{label}</h3></div>
+    <div className="vertical-bars"><div className="vertical-bar-column"><div className="vertical-bar-track"><i className="vertical-bar" style={{ height: `${Math.max((value / max) * 100, 10)}%` }} /></div><strong>{value}{unit}</strong><span>나의 결과</span></div><div className="vertical-bar-column"><div className="vertical-bar-track"><i className="vertical-bar is-reference" style={{ height: `${Math.max((reference / max) * 100, 10)}%` }} /></div><strong>{reference}{unit}</strong><span>참고 기준</span></div></div>
+  </article>;
+}
+
+function ContentFeedbackSection({ feedback }: { feedback: ContentFeedback }) {
+  return <section className="result-section content-feedback-section"><h2>답변에 더해볼 내용</h2><p className="content-feedback-text">{feedback.text}</p></section>;
 }
 
 function CoachAudioSection({ state }: { state: CoachAudioState }) {
@@ -88,10 +103,6 @@ function CoachAudioSection({ state }: { state: CoachAudioState }) {
   }
 
   return <section className="result-section coach-section"><h2>말하기 예시</h2><p>다음 연습 전에 말하기 예시를 들어보세요.</p><button className="flow-secondary-button" type="button" onClick={isPlaying ? stopPlayback : playAudio}>{isPlaying ? "■ 멈춤" : "▶ 재생"}</button></section>;
-}
-
-function Metric({ label, value }: { label: string; value: string }) {
-  return <div className="metric"><span>{label}</span><strong>{value}</strong></div>;
 }
 
 export default ResultPage;

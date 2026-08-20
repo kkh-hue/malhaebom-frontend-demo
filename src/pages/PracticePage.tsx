@@ -24,12 +24,14 @@ export type PracticeQuestion = {
 };
 
 type MicrophoneState = "idle" | "checking" | "granted" | "denied" | "error";
+type PracticeView = "intro" | "question-select";
 
 type PracticePageProps = {
   onRecordingReady: (question: PracticeQuestion) => void;
 };
 
 function PracticePage({ onRecordingReady }: PracticePageProps) {
+  const [view, setView] = useState<PracticeView>("intro");
   const [questionType, setQuestionType] = useState<QuestionType>("preset");
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
   const [customQuestion, setCustomQuestion] = useState("");
@@ -57,6 +59,16 @@ function PracticePage({ onRecordingReady }: PracticePageProps) {
     setQuestionType(type);
     setSelectedQuestion(null);
     setCustomQuestion("");
+    setMicrophoneState("idle");
+  };
+
+  const openQuestionSelect = () => {
+    setView("question-select");
+    setMicrophoneState("idle");
+  };
+
+  const returnToIntro = () => {
+    setView("intro");
     setMicrophoneState("idle");
   };
 
@@ -109,8 +121,8 @@ function PracticePage({ onRecordingReady }: PracticePageProps) {
     <div className="practice-page">
       <AppHeader />
 
-      <main className="practice-main" id="practice">
-        <section className="intro-card card" aria-labelledby="intro-title">
+      <main className={`practice-main ${view === "intro" ? "is-intro" : "is-question-select"}`} id="practice">
+        {view === "intro" && <section className="intro-card card" aria-labelledby="intro-title">
           <div className="intro-topline">✨ AI 면접 전달력 코치</div>
           <h1 id="intro-title">답변은 준비됐어요.<br />이제 말하는 방식을 다듬어볼까요?</h1>
           <p className="intro-description">
@@ -119,7 +131,7 @@ function PracticePage({ onRecordingReady }: PracticePageProps) {
             말하기 예시를 들려드려요.
           </p>
           <div className="notice-group">
-            <div className="notice"><span aria-hidden="true">💡</span> 답변 내용은 바꾸지 않아요.</div>
+            <div className="notice"><span aria-hidden="true">💡</span> 답변을 대신 작성해드리지는 않아요.</div>
             <div className="notice"><span aria-hidden="true">🕒</span> 녹음 및 연습 기록은 최대 24시간 동안 보관 후 자동 삭제돼요.</div>
           </div>
 
@@ -130,14 +142,16 @@ function PracticePage({ onRecordingReady }: PracticePageProps) {
             <span className="step-line" aria-hidden="true" />
             <div className="step"><span className="step-number">03</span><span>듣고 재연습</span></div>
           </div>
-        </section>
+          <button className="start-button intro-cta" type="button" onClick={openQuestionSelect}>연습 시작하기 <span aria-hidden="true">→</span></button>
+        </section>}
 
-        <section className="question-card card" aria-labelledby="question-title">
-          <div className="question-heading">
+        {view === "question-select" && <section className={`question-card question-select-card card${microphoneState !== "idle" ? " is-microphone-check" : ""}`} aria-labelledby={microphoneState === "idle" ? "question-title" : undefined} aria-label={microphoneState !== "idle" ? "마이크 확인" : undefined}>
+          <button className="practice-back-button" type="button" onClick={returnToIntro}>← 돌아가기</button>
+          {microphoneState === "idle" && <div className="question-heading">
             <p className="eyebrow">오늘의 연습</p>
             <h2 id="question-title">어떤 질문으로 시작할까요?</h2>
             <p>기본 질문을 고르거나, 연습하고 싶은 질문을 직접 입력해 주세요.</p>
-          </div>
+          </div>}
 
           {microphoneState === "idle" ? (
           <>
@@ -176,7 +190,7 @@ function PracticePage({ onRecordingReady }: PracticePageProps) {
             <div className="custom-panel" role="tabpanel">
               <label className="panel-caption" htmlFor="custom-question">연습하고 싶은 면접 질문을 입력해 주세요.</label>
               <textarea
-                id="custom-question" value={customQuestion} maxLength={201}
+                id="custom-question" value={customQuestion} maxLength={200}
                 onChange={(event) => setCustomQuestion(event.target.value)}
                 placeholder="질문을 입력해 주세요."
                 aria-invalid={Boolean(customError)} aria-describedby="custom-helper custom-error"
@@ -202,7 +216,7 @@ function PracticePage({ onRecordingReady }: PracticePageProps) {
               onStart={handleRecordingStart}
             />
           )}
-        </section>
+        </section>}
       </main>
     </div>
   );
