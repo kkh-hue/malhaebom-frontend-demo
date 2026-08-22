@@ -18,6 +18,9 @@
 .recording-limit, .recording-tip { color: #666a66; font-size: 14px; line-height: 1.8; }
 .recording-tip { margin-top: 20px; color: #888b85; font-size: 13px; }
 .recording-start-button { max-width: 420px; margin: 28px auto 0; }
+.recording-upload-input { display: none; }
+.recording-upload-button { display: block; width: min(100%, 420px); margin: 10px auto 0; }
+.recording-upload-help { margin-top: 8px; color: #888b85; font-size: 12px; line-height: 1.6; }
 .rerecord-coach-note { margin: 16px 0 0; color: #888b85; font-size: 12px; line-height: 1.6; }
 .coach-example-button { border: 1px solid #ded7c6; border-radius: 9px; padding: 9px 13px; color: #4c7773; background: #fffdf7; font-size: 12px; font-weight: 600; cursor: pointer; }
 .recording-login-backdrop { position: fixed; z-index: 10; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(47, 61, 59, .18); }

@@ -11,16 +11,17 @@ type RecordingPageProps = {
   attemptNo: 1 | 2;
   isRerecord?: boolean;
   coachAudioState?: CoachAudioState;
-  onAnalysis: (attemptNo: 1 | 2) => void;
+  onAnalysis: (attemptNo: 1 | 2, audio: Blob) => void;
   isLoggedIn: boolean;
   onLogin: () => void;
 };
 type RecordingStatus = "ready" | "recording" | "paused" | "completed" | "error";
-type RecordingError = "microphone" | "start" | "interrupted" | "blob" | "too-short";
+type RecordingError = "microphone" | "start" | "interrupted" | "blob" | "too-short" | "file";
 
 const MAX_RECORDING_MS = 60_000;
 const MIN_RECORDING_MS = 5_000;
 const MIME_TYPES = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"];
+const WAV_MIME_TYPES = new Set(["audio/wav", "audio/x-wav", "audio/wave", "audio/vnd.wave"]);
 
 function formatTime(milliseconds: number) {
   const seconds = Math.floor(milliseconds / 1000);
@@ -44,8 +45,10 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
   const [errorType, setErrorType] = useState<RecordingError | null>(null);
   const [showLoginRequired, setShowLoginRequired] = useState(false);
   const recorderRef = useRef<MediaRecorder | null>(null);
+  const uploadInputRef = useRef<HTMLInputElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
+  const audioBlobRef = useRef<Blob | null>(null);
   const audioUrlRef = useRef<string | null>(null);
   const elapsedMsRef = useRef(0);
   const startedAtRef = useRef(0);
@@ -123,6 +126,7 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
     try {
       const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
       if (blob.size === 0) throw new Error("Empty recording blob");
+      audioBlobRef.current = blob;
       revokeAudioUrl();
       const nextAudioUrl = URL.createObjectURL(blob);
       audioUrlRef.current = nextAudioUrl;
@@ -222,6 +226,8 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
     stopStream();
     recorderRef.current = null;
     chunksRef.current = [];
+    audioBlobRef.current = null;
+    if (uploadInputRef.current) uploadInputRef.current.value = "";
     recorderErrorRef.current = false;
     revokeAudioUrl();
     setElapsed(0);
@@ -229,12 +235,35 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
     setStatus("ready");
   };
 
+  const handleWavUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    const hasWavExtension = file.name.toLowerCase().endsWith(".wav");
+    if (!hasWavExtension && !WAV_MIME_TYPES.has(file.type.toLowerCase())) {
+      setErrorType("file");
+      setStatus("error");
+      return;
+    }
+
+    recorderRef.current = null;
+    stopStream();
+    revokeAudioUrl();
+    audioBlobRef.current = file;
+    audioUrlRef.current = URL.createObjectURL(file);
+    setAudioUrl(audioUrlRef.current);
+    setElapsed(0);
+    setErrorType(null);
+    setStatus("completed");
+  };
+
   const handleAnalysis = () => {
     if (!isLoggedIn) {
       setShowLoginRequired(true);
       return;
     }
-    onAnalysis(attemptNo);
+    if (audioBlobRef.current) onAnalysis(attemptNo, audioBlobRef.current);
   };
 
   const playQuestionTts = () => {
@@ -257,8 +286,8 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
     }, 700);
   };
 
-  const errorTitle = errorType === "too-short" ? "조금만 더 답변해 주세요." : errorType === "microphone" ? "마이크를 사용할 수 없어요." : errorType === "interrupted" ? "녹음이 중단됐어요." : errorType === "blob" ? "녹음 파일을 만들 수 없어요." : "녹음을 시작할 수 없어요.";
-  const errorDescription = errorType === "too-short" ? "답변은 5초 이상 녹음해야 분석할 수 있어요." : errorType === "microphone" ? "마이크 권한과 연결 상태를 확인한 뒤 다시 시도해 주세요." : errorType === "interrupted" ? "마이크 연결 상태를 확인한 뒤 다시 시도해 주세요." : errorType === "blob" ? "잠시 후 다시 녹음해 주세요." : "마이크 권한과 연결 상태를 확인한 뒤 다시 시도해 주세요.";
+  const errorTitle = errorType === "too-short" ? "조금만 더 답변해 주세요." : errorType === "file" ? "WAV 파일만 업로드할 수 있어요." : errorType === "microphone" ? "마이크를 사용할 수 없어요." : errorType === "interrupted" ? "녹음이 중단됐어요." : errorType === "blob" ? "녹음 파일을 만들 수 없어요." : "녹음을 시작할 수 없어요.";
+  const errorDescription = errorType === "too-short" ? "답변은 5초 이상 녹음해야 분석할 수 있어요." : errorType === "file" ? "확장자가 .wav인 녹음 파일을 선택해 주세요." : errorType === "microphone" ? "마이크 권한과 연결 상태를 확인한 뒤 다시 시도해 주세요." : errorType === "interrupted" ? "마이크 연결 상태를 확인한 뒤 다시 시도해 주세요." : errorType === "blob" ? "잠시 후 다시 녹음해 주세요." : "마이크 권한과 연결 상태를 확인한 뒤 다시 시도해 주세요.";
   const statusLabel = status === "ready" ? "녹음 준비" : status === "recording" ? "녹음 중" : status === "paused" ? "일시정지" : status === "completed" ? "녹음 완료" : errorType === "too-short" ? "녹음 확인" : "녹음 오류";
 
   return (
@@ -282,6 +311,9 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
             {!isRerecord && <p className="recording-tip">완벽하게 말하려 하지 않아도 괜찮아요.<br />평소처럼 자연스럽게 답해 주세요.</p>}
             {isRerecord && <div className="rerecord-coach-note">{coachAudioState === "available" ? <button className="coach-example-button" type="button" onClick={() => console.log("[말해봄 mock] 정적 coach audio 재생")}>말하기 예시 다시 듣기</button> : coachAudioState === "unavailable" ? "이번에는 말하기 예시 없이 텍스트 안내를 참고해 다시 연습해 주세요." : "이번에는 텍스트 안내를 참고해 다시 연습해 주세요."}</div>}
             <button className="start-button recording-start-button" type="button" onClick={() => void startRecording()}>{isRerecord ? "재녹음 시작하기" : "녹음 시작하기"} <span aria-hidden="true">→</span></button>
+            <input ref={uploadInputRef} className="recording-upload-input" type="file" accept="audio/wav,.wav" onChange={handleWavUpload} />
+            <button className="secondary-button recording-upload-button" type="button" onClick={() => uploadInputRef.current?.click()}>WAV 파일 업로드</button>
+            <p className="recording-upload-help">이미 녹음한 WAV 파일로도 분석할 수 있어요.</p>
           </div>}
 
           {(status === "recording" || status === "paused") && <div className="recording-state active-state" role="status" aria-live="polite">
@@ -297,9 +329,9 @@ function RecordingPage({ question, attemptNo, isRerecord = false, coachAudioStat
 
           {status === "completed" && <div className="recording-state completed-state">
             <div className="recording-icon" aria-hidden="true">✓</div>
-            <h2>답변 녹음이 완료됐어요.</h2>
-            <p className="recording-tip completed-description">녹음한 답변을 확인한 뒤 분석을 시작해 주세요.</p>
-            <p className="recording-limit">총 녹음 시간 {formatTime(elapsedMs)}</p>
+            <h2>{audioBlobRef.current instanceof File ? "녹음 파일 업로드가 완료됐어요." : "답변 녹음이 완료됐어요."}</h2>
+            <p className="recording-tip completed-description">{audioBlobRef.current instanceof File ? "업로드한 답변을 확인한 뒤 분석을 시작해 주세요." : "녹음한 답변을 확인한 뒤 분석을 시작해 주세요."}</p>
+            {!(audioBlobRef.current instanceof File) && <p className="recording-limit">총 녹음 시간 {formatTime(elapsedMs)}</p>}
             {audioUrl && <audio className="recording-player" controls src={audioUrl} />}
             <div className="recording-actions"><button className="secondary-button" type="button" onClick={resetRecording}>다시 녹음</button><button className="start-button" type="button" onClick={handleAnalysis}>분석하기</button></div>
           </div>}

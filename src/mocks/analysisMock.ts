@@ -20,6 +20,7 @@ export type ContentFeedback = {
 export type AnalysisResult = {
   attemptNo: 1 | 2;
   transcript: string;
+  answerDurationSec?: number;
   speakingRate: number;
   longSilence: number;
   repeatedExpressions: number;
@@ -37,9 +38,9 @@ export const MOCK_COACH_AUDIO_SRC: string | null = null;
 
 // 실제 평균 데이터가 아닌 화면 확인용 참고 기준 Mock입니다.
 export const MOCK_ANALYSIS_REFERENCE_METRICS: ReferenceMetrics = {
-  pace: { value: 300, min: 280, max: 320 },
-  longSilenceCount: { value: 1, min: 0, max: 1 },
-  repetitionCount: { value: 2, min: 0, max: 2 },
+  pace: { value: 320, min: 280, max: 320 },
+  longSilenceCount: { value: 2.48, min: 0, max: 2.48 },
+  repetitionCount: { value: 0.41, min: 0, max: 0.41 },
 };
 
 const firstMockResult: AnalysisResult = {
@@ -51,13 +52,13 @@ const firstMockResult: AnalysisResult = {
   feedback: [
     {
       title: "긴 침묵",
-      measurement: "이번 답변에서는 긴 침묵이 3회 나타났고, 참고 기준 1회보다 2회 많았어요.",
-      nextPractice: "다음 답변에서는 긴 침묵을 1~2회 이내로 줄여보세요.",
+      measurement: "이번 답변에서는 긴 침묵이 3회 나타났어요. 참고 기준은 약 2.5회/분이에요.",
+      nextPractice: "다음 답변에서는 긴 침묵을 줄여보세요.",
     },
     {
       title: "반복 표현",
-      measurement: "이번 답변에서는 반복 표현이 4회 나타났고, 참고 기준 2회보다 2회 많았어요.",
-      nextPractice: "다음 답변에서는 반복 표현을 2회 이하로 줄이는 것을 목표로 연습해보세요.",
+      measurement: "이번 답변에서는 반복 표현이 4회 나타났어요. 참고 기준은 약 0.4회/100어절이에요.",
+      nextPractice: "다음 답변에서는 반복 표현을 줄이는 것을 목표로 연습해보세요.",
     },
   ],
   prosodyReferenceAvailable: true,

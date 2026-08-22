@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import logoImage from "./assets/malhaebom-detail-logo.png";
+const logoImage = "/malhaebom-detail-logo.png";
 
 export type AppDestination = "practice" | "history" | "auth";
 type NavigationContextValue = { active: AppDestination; isLoggedIn: boolean; navigate: (destination: AppDestination) => void; logout: () => void };
