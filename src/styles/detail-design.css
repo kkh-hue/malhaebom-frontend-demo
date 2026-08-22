@@ -1,0 +1,525 @@
+/* 상세 디자인 미리보기: 기존 레이아웃과 기능은 유지하고 브랜드·배경만 덮어씁니다. */
+:root,
+body,
+.practice-page,
+.flow-page,
+.recording-page,
+.account-page,
+.history-page {
+  background: #f7f6ff;
+}
+
+.practice-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #f7f6ff;
+}
+
+.background-bubbles {
+  display: none;
+}
+
+.background-bubbles::after {
+  display: none;
+}
+
+.background-bubble {
+  position: absolute;
+  width: clamp(92px, 10vw, 142px);
+  aspect-ratio: 1.35;
+  border: 1px solid #153f6217;
+  border-radius: 48% 48% 48% 16%;
+  background: #ffffff42;
+  filter: blur(.1px);
+  transform: rotate(-14deg);
+}
+
+.background-bubble::before {
+  position: absolute;
+  inset: 0;
+  color: #153f6221;
+  content: '•••';
+  display: grid;
+  place-items: center;
+  padding-bottom: 8px;
+  font-size: 24px;
+  letter-spacing: 4px;
+}
+
+.background-bubble::after {
+  position: absolute;
+  bottom: -13px;
+  left: 12%;
+  width: 25px;
+  height: 25px;
+  border-left: 1px solid #153f6217;
+  background: #ffffff42;
+  content: '';
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  transform: rotate(10deg);
+}
+
+.bubble-left-middle { top: 15%; left: 3%; background: #38bca30f; transform: rotate(-16deg); }
+.bubble-left-bottom { top: 58%; left: -2%; background: #38bca30d; transform: rotate(12deg) scale(.72); }
+.bubble-right-top { top: 7%; right: 7%; background: #153f620b; transform: rotate(15deg) scale(.82); }
+.bubble-right-bottom { top: 76%; right: 2%; background: #153f620a; transform: rotate(-10deg) scale(1.05); }
+
+.background-mic {
+  display: none;
+}
+
+.background-mic::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  color: #6c7eff;
+  content: '🎙️';
+  font-size: 66px;
+  line-height: 1;
+}
+
+.background-mic::after {
+  display: none;
+}
+
+.mic-left,
+.mic-right { display: none; }
+
+.practice-page > .site-header,
+.practice-page > .practice-main,
+.practice-page > .site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 800px) {
+  .background-bubble { transform: scale(.65); }
+  .bubble-left-middle { left: -2%; }
+  .bubble-right-top,
+  .bubble-right-bottom { right: -8%; }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  transform: translate(calc(-0.5cm - 4px), 16.62px);
+}
+
+.card,
+.flow-card,
+.recording-card,
+.account-card,
+.history-item {
+  background: #fffefe;
+}
+
+.brand-logo-image {
+  display: block;
+  width: 198px;
+  height: auto;
+}
+
+.login-button,
+.start-button,
+.flow-primary-button {
+  background: #5b4bb7;
+}
+
+.login-button:hover,
+.start-button:hover:not(:disabled),
+.flow-primary-button:hover {
+  background: #473993;
+}
+
+.intro-topline,
+.eyebrow,
+.flow-eyebrow {
+  color: #7b61ff;
+}
+
+.nav-link.is-active,
+.tab.is-selected,
+.auth-tab.is-active {
+  color: #7b61ff;
+}
+
+.nav-link.is-active::after,
+.tab.is-selected::after,
+.auth-tab.is-active::after {
+  background: #7b61ff;
+}
+
+.question-tabs {
+  border-color: #ded9fa;
+}
+
+.tab {
+  color: #77718f;
+}
+
+.custom-panel textarea {
+  border-color: #ddd7fb;
+  background: #f9f8ff;
+}
+
+.custom-panel textarea::placeholder {
+  color: #8983a4;
+}
+
+.custom-panel textarea:focus {
+  border-color: #7b61ff;
+  box-shadow: 0 0 0 3px rgba(123, 97, 255, .15);
+}
+
+.notice:first-child {
+  color: #5e50aa;
+  background: #f0eeff;
+}
+
+.notice:nth-child(2) {
+  color: #5e50aa;
+  background: #f0eeff;
+}
+
+.step-number {
+  color: #5b4bb7;
+}
+
+.intro-card .step {
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+
+.intro-card .step-icon {
+  display: block;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.intro-card .step-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #6f6988;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.intro-card .step-label .step-number {
+  font-size: 11px;
+}
+
+.intro-card .step-line {
+  position: relative;
+  align-self: center;
+  height: 0;
+  margin: 0 16px;
+  border-top: 2px dashed #c8c2ed;
+  background: transparent;
+}
+
+.intro-card .step-line::after {
+  display: none;
+}
+
+.intro-description {
+  font-size: 14px;
+}
+
+.question-tts-message,
+.question-tts-button,
+.coach-example-button,
+.flow-secondary-button,
+.history-view-button,
+.history-back-button,
+.auth-switch,
+.mock-status,
+.selected-question-preview span,
+.flow-question span,
+.metric strong,
+.metric-card-heading strong,
+.vertical-bar-column strong,
+.action-feedback h3,
+.action-feedback strong,
+.accordion > button,
+.history-status,
+.history-detail-question span,
+.history-metrics strong {
+  color: #5b4bb7;
+}
+
+.vertical-bar {
+  background: #5b4bb7;
+}
+
+.preset-question.is-selected {
+  border-color: #ddd7fb;
+  color: #5142a4;
+  background: #f9f8ff;
+}
+
+.preset-question.is-selected .question-index {
+  color: #5b4bb7;
+}
+
+.feedback-list li,
+.action-feedback,
+.history-change-list p,
+.history-transcript.second-answer {
+  background: #f0eeff;
+}
+
+/* 화면 안쪽의 정보·입력 박스를 질문 작성 영역과 같은 표면색으로 통일합니다. */
+.preset-question:hover,
+.flow-question,
+.selected-question-preview,
+.recording-question,
+.transcript,
+.metric,
+.metric-visual-card,
+.content-feedback-text,
+.neutral-section,
+.subtle-section,
+.comparison-grid strong,
+.history-detail-question,
+.history-transcript,
+.account-card input,
+.question-tts-button,
+.coach-example-button,
+.flow-secondary-button,
+.history-view-button,
+.secondary-button,
+.account-popover,
+.recording-login-card,
+.confirm-card {
+  border-color: #ddd7fb;
+  background: #f9f8ff;
+}
+
+.preset-question:hover,
+.question-tts-button:hover,
+.secondary-button:hover,
+.account-popover button:hover {
+  color: #5142a4;
+  background: #f0eeff;
+}
+
+.feedback-list li,
+.action-feedback,
+.history-change-list p,
+.history-transcript.second-answer,
+.microphone-icon,
+.recording-icon,
+.flow-icon,
+.completed-state .recording-icon {
+  background: #f0eeff;
+}
+
+.flow-icon.is-loading,
+.loading-indicator {
+  border-color: #ddd7fb;
+  border-top-color: #7b61ff;
+}
+
+.flow-icon.is-loading span,
+.waveform i {
+  background: #7b61ff;
+}
+
+.recording-player {
+  accent-color: #7b61ff;
+}
+
+.vertical-bar-track,
+.feedback-part + .feedback-part,
+.result-section,
+.history-detail-section,
+.accordion,
+.comparison-grid,
+.comparison-grid > * {
+  border-color: #ddd7fb;
+}
+
+:root,
+.flow-page,
+.account-page,
+.history-page {
+  color: #2f2945;
+}
+
+.brand,
+.nav-link.is-active,
+h1,
+h2,
+.flow-card h1,
+.flow-card h2,
+.metric-card-heading h3,
+.microphone-panel h3,
+.selected-question-preview strong,
+.flow-question,
+.timer,
+.account-card input {
+  color: #2f2945;
+}
+
+.nav-link,
+.intro-description,
+.preset-question,
+.recording-limit,
+.recording-tip,
+.analysis-card > p:not(.flow-eyebrow),
+.transcript,
+.content-feedback-text,
+.neutral-section p,
+.subtle-section p,
+.coach-section p,
+.accordion-content,
+.comparison-grid > *,
+.history-transcript,
+.history-change-list p,
+.account-card label {
+  color: #69637d;
+}
+
+.panel-caption,
+.question-heading > p:last-child,
+.question-tts-detail,
+.metric span,
+.metric-card-heading span,
+.vertical-bar-column,
+.history-description,
+.history-toolbar,
+.history-item p,
+.history-detail-question small,
+.history-metrics span,
+.account-description,
+.microphone-panel small,
+.recording-upload-help,
+.rerecord-coach-note,
+.character-count,
+.site-footer {
+  color: #8983a4;
+}
+
+.recording-login-backdrop,
+.confirm-backdrop {
+  background: rgba(47, 41, 69, .2);
+}
+
+.text-danger-button,
+.history-delete-button,
+.field-error,
+.error-message,
+.question-tts-panel.is-error .question-tts-message,
+.recording-icon.is-error {
+  color: #bc6378;
+}
+
+@media (max-width: 470px) {
+  .brand-logo-image {
+    width: 162px;
+  }
+}
+
+/* 주요 카드를 화면 중심보다 조금 아래에, 여유 있는 크기로 배치합니다. */
+.practice-main {
+  margin-top: clamp(42px, 6vh, 64px);
+}
+
+.practice-main.is-intro,
+.practice-main.is-question-select,
+.flow-main,
+.recording-main,
+.account-main,
+.history-main {
+  width: min(100%, 860px);
+  max-width: 860px;
+  margin-top: clamp(48px, 7vh, 72px);
+}
+
+.card {
+  height: min(590px, calc(100vh - 176px));
+}
+
+.flow-card,
+.recording-card,
+.account-card {
+  padding: 36px 44px;
+}
+
+/* 녹음 준비 화면은 카드 높이를 뷰포트 안에 맞춥니다. */
+.recording-main {
+  margin-top: clamp(34px, 5vh, 52px);
+}
+
+.recording-card {
+  padding: 24px 44px;
+}
+
+.recording-icon {
+  margin: 26px auto 14px;
+}
+
+.recording-start-button {
+  margin-top: 22px;
+}
+
+.recording-upload-help {
+  margin-bottom: 0;
+}
+
+.vertical-bar-column .metric-value {
+  min-height: 38px;
+  margin-top: 2px;
+  color: #5b4bb7;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.vertical-bar-column .metric-value--split {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.vertical-bar-column .metric-value--split b {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.vertical-bar-column .metric-value--split small {
+  color: #8983a4;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.vertical-bar-column > span {
+  color: #69637d;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .practice-main,
+  .practice-main.is-intro,
+  .practice-main.is-question-select,
+  .flow-main,
+  .recording-main,
+  .account-main,
+  .history-main {
+    margin-top: 32px;
+  }
+
+  .flow-card,
+  .recording-card,
+  .account-card {
+    padding: 32px 28px;
+  }
+}
