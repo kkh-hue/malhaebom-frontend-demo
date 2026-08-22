@@ -131,16 +131,16 @@ function PracticePage({ onRecordingReady }: PracticePageProps) {
             말하기 예시를 들려드려요.
           </p>
           <div className="notice-group">
-            <div className="notice"><span aria-hidden="true">💡</span> 답변을 대신 작성해드리지는 않아요.</div>
+            <div className="notice"><span aria-hidden="true">💡</span> 말하는 방식과 답변 내용을 함께 살펴봐요.</div>
             <div className="notice"><span aria-hidden="true">🕒</span> 녹음 및 연습 기록은 최대 24시간 동안 보관 후 자동 삭제돼요.</div>
           </div>
 
           <div className="steps" aria-label="연습 진행 단계">
-            <div className="step"><span className="step-number">01</span><span>답변 녹음</span></div>
+            <div className="step"><span className="step-icon" aria-hidden="true">🎙️</span><span className="step-label"><span className="step-number">01</span>답변 녹음</span></div>
             <span className="step-line" aria-hidden="true" />
-            <div className="step"><span className="step-number">02</span><span>전달력 분석</span></div>
+            <div className="step"><span className="step-icon" aria-hidden="true">📊</span><span className="step-label"><span className="step-number">02</span>전달력 분석</span></div>
             <span className="step-line" aria-hidden="true" />
-            <div className="step"><span className="step-number">03</span><span>듣고 재연습</span></div>
+            <div className="step"><span className="step-icon" aria-hidden="true">🎧</span><span className="step-label"><span className="step-number">03</span>듣고 재연습</span></div>
           </div>
           <button className="start-button intro-cta" type="button" onClick={openQuestionSelect}>연습 시작하기 <span aria-hidden="true">→</span></button>
         </section>}

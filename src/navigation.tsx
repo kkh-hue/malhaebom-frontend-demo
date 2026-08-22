@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
+import logoImage from "./assets/malhaebom-detail-logo.png";
 
 export type AppDestination = "practice" | "history" | "auth";
 type NavigationContextValue = { active: AppDestination; isLoggedIn: boolean; navigate: (destination: AppDestination) => void; logout: () => void };
@@ -20,7 +21,7 @@ export function AppHeader() {
   const [accountOpen, setAccountOpen] = useState(false);
   return (
     <header className="site-header">
-      <button className="brand" type="button" onClick={() => navigate("practice")} aria-label="말해봄 홈">말해봄</button>
+      <button className="brand" type="button" onClick={() => navigate("practice")} aria-label="말해봄 홈"><img className="brand-logo-image" src={logoImage} alt="말해봄" /></button>
       <nav className="site-nav" aria-label="주요 메뉴">
         <button className={active === "practice" ? "nav-link is-active" : "nav-link"} type="button" onClick={() => navigate("practice")}>연습하기</button>
         <button className={active === "history" ? "nav-link is-active" : "nav-link"} type="button" onClick={() => navigate("history")}>연습 기록</button>
